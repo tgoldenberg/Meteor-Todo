@@ -11,10 +11,13 @@
         Hide Completed Tasks
       </label>
       {{> loginButtons}}
-      <form class="new-task">
-        <input type="text" name="text" placeholder="Type to add new tasks" />
-      </form>
+      {{#if currentUser}}
+        <form class="new-task">
+          <input type="text" name="text" placeholder="Type to add new tasks" />
+        </form>
+      {{/if}}
     </header>
+    <h1>username: {{currentUser.username}}</h1>
 
     <ul>
       {{#each tasks}}
@@ -29,6 +32,7 @@
     <button class="delete">&times;</button>
 
     <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+    <span class="text"><strong>{{username}}</strong> - {{text}}</span>
 
     <span class="text">{{text}}</span>
   </li>
