@@ -15,7 +15,9 @@ if (Meteor.isClient) {
       var text = event.target.text.value;
       Tasks.insert({
         text: text,
-        createdAt: new Date()
+        createdAt: new Date(),            // current time
+        owner: Meteor.userId(),           // _id of logged in user
+        username: Meteor.user().username  // username of logged in user
       });
       event.target.text.value = "";
     },
@@ -34,6 +36,9 @@ if (Meteor.isClient) {
     },
     hideCompleted: function() {
       return Session.get("hideCompleted");
+    },
+    incompleteCount: function() {
+      return Tasks.find({checked: {$ne: true}}).count();
     }
   });
 
@@ -47,5 +52,9 @@ if (Meteor.isClient) {
     "click .delete": function() {
       Tasks.remove(this._id);
     }
+  });
+
+  Accounts.ui.config({
+    passwordSignupFields: "USERNAME_ONLY"
   });
 }
