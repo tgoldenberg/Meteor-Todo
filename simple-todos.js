@@ -1,8 +1,6 @@
 Tasks = new Mongo.Collection("tasks");
 
 if (Meteor.isServer) {
- // This code only runs on the server
- // Only publish tasks that are public or belong to the current user
  Meteor.publish("tasks", function () {
    return Tasks.find({
      $or: [
@@ -23,7 +21,6 @@ if (Meteor.isClient) {
 
   Template.body.events({
     "submit .new-task": function(event) {
-      console.log(event);
       event.preventDefault();
       var text = event.target.text.value;
       Meteor.call("addTask", text);
@@ -100,7 +97,6 @@ Meteor.methods({
   setChecked: function(taskId, setChecked) {
     var task = Tasks.findOne(taskId);
     if (task.private && task.owner !== Meteor.userId()) {
-      // If the task is private, make sure only the owner can check it off
       throw new Meteor.Error("not-authorized");
     }
     Tasks.update(taskId, { $set: { checked: setChecked}});
